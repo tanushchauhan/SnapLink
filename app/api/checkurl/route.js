@@ -11,8 +11,6 @@ export async function POST(req, res) {
     .select("*")
     .eq("urlID", urlID);
 
-  console.log(list);
-
   if (error) {
     return Response.json({ success: false, error });
   } else if (list.length === 0) {

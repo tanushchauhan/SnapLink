@@ -7,7 +7,7 @@ function Page() {
   async function handleSubmit(e) {
     e.preventDefault();
     const urlID = e.target.floating_id.value;
-    const url = e.target.url.value;
+    let url = e.target.url.value;
 
     const res = await fetch("/api/addurl", {
       method: "POST",
@@ -22,7 +22,16 @@ function Page() {
     const data = await res.json();
 
     if (!data.success) {
-      toast.error(`Error: ${data.error}`);
+      if (
+        data.error.message ===
+          'duplicate key value violates unique constraint "urls_urlID_key"' &&
+        data.error.code === "23505"
+      ) {
+        toast.error(`Error: ID already exists! Please choose another ID.`);
+        e.target.floating_id.value = "";
+      } else {
+        toast.error(`Error: ${data.error.message}`);
+      }
     } else {
       toast.success("Successfully created!");
       e.target.floating_id.value = "";
@@ -34,7 +43,7 @@ function Page() {
       <div className="flex items-center justify-center mt-16 mx-8 w-full md:max-w-lg mb-28">
         <div className="flex gap-10 items-center justify-center flex-col w-full">
           <Image
-            src="/placeholder.png"
+            src="/logo.png"
             width={600}
             height={600}
             alt="SnapLink Logo"
@@ -49,6 +58,7 @@ function Page() {
                   id="floating_id"
                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
+                  required
                 />
                 <label
                   htmlFor="floating_id"
@@ -64,18 +74,18 @@ function Page() {
                 >
                   Enter in the URL
                 </label>
-                <textarea
+                <input
                   id="url"
-                  rows="4"
+                  type="url"
                   className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="eg. https://..."
                   required
-                ></textarea>
+                ></input>
               </div>
             </div>
             <button
               type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-8"
             >
               Submit
             </button>
