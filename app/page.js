@@ -47,6 +47,7 @@ function Page() {
             width={600}
             height={600}
             alt="SnapLink Logo"
+            className="mt-5 mb-20"
             priority
           />
           <form className="w-full" onSubmit={handleSubmit}>
