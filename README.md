@@ -40,7 +40,7 @@ You also need to setup a supabase database and connect that so the links and the
 
 ## Authors
 
-- [@tanushchauhan](https://www.github.com/octokatherine)
+- [@tanushchauhan](https://github.com/tanushchauhan/)
 
 ## Demo
 
